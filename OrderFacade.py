@@ -1,6 +1,14 @@
 from abc import ABCMeta, abstractmethod
 from MenuItemFactory import MenuItemFactory
 
+# from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+# from sqlalchemy.orm import sessionmaker
+
+Base = declarative_base()
+
+
 class OrderFacade:
     def __init__(self, items = None):
         self.items = items
@@ -45,8 +53,18 @@ class OrderFacade:
     def addToOrder(self, item):
         self.theOrder.append(item)
 
-class OrderItem:
+class OrderItem(Base):
     def __init__(self, itemSubType, itemName, itemSize=None):
         self.itemSubType = itemSubType
         self.itemName = itemName
         self.itemSize = itemSize
+
+    __tablename__ = 'orderItem'
+
+    id = Column(Integer, primary_key=True)
+    itemSubType = Column(String)
+    itemName = Column(String)
+    itemSize = Column(String)
+
+    def __repr__(self):
+        return "<orderItem[itemSubType = {0}, itemName = {1}, itemSize = {2}]>".format(self.itemSubType, self.itemName, self.itemSize)
